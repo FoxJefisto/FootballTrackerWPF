@@ -1,0 +1,126 @@
+﻿<Window x:Class="FootballTracker.CompetitionPlayersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FootballTracker"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="CompetitionPlayersWindow" Height="800" Width="1200" WindowStartupLocation="CenterOwner"
+        Loaded="Window_Loaded" WindowStyle="None"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    <Window.Resources>
+        <Style x:Key="ClubStyle">
+            <EventSetter Event="Control.MouseLeftButtonDown" Handler="tbClubName_MouseLeftButtonDown"/>
+            <Style.Triggers>
+                <Trigger Property="Control.IsMouseOver" Value="True">
+                    <Setter Property="Control.Cursor" Value="Hand"/>
+                    <Setter Property="Control.Foreground" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="PlayerStyle">
+            <EventSetter Event="Control.MouseLeftButtonDown" Handler="tbPlayerName_MouseLeftButtonDown"/>
+            <Style.Triggers>
+                <Trigger Property="Control.IsMouseOver" Value="True">
+                    <Setter Property="Control.Cursor" Value="Hand"/>
+                    <Setter Property="Control.Foreground" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CloseStyle">
+            <Style.Setters>
+                <Setter Property="Control.Foreground" Value="White"/>
+                <EventSetter Event="Control.MouseLeftButtonDown" Handler="iconClose_MouseLeftButtonDown"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="Control.IsMouseOver" Value="True">
+                    <Setter Property="Control.Cursor" Value="Hand"/>
+                    <Setter Property="Control.Foreground" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BackStyle">
+            <Style.Setters>
+                <Setter Property="Control.Foreground" Value="White"/>
+                <EventSetter Event="Control.MouseLeftButtonDown" Handler="iconBack_MouseLeftButtonDown"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="Control.IsMouseOver" Value="True">
+                    <Setter Property="Control.Cursor" Value="Hand"/>
+                    <Setter Property="Control.Foreground" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" MinHeight="80"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#FF1268BD">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <materialDesign:PackIcon Kind="ArrowLeft" MinWidth="50" MinHeight="50" Margin="30,15" Style="{StaticResource BackStyle}"/>
+            <TextBlock x:Name="tbTitle" Grid.Column="1" FontSize="48" Foreground="White">Футбольный трекер</TextBlock>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                <materialDesign:PackIcon Kind="Close" MinWidth="50" MinHeight="50" Margin="15" Style="{StaticResource CloseStyle}"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="10" HorizontalAlignment="Left">
+                    <DataGrid x:Name="dgPlayerStats" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding Path=PlayerName.Number}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTemplateColumn Header="Имя" HeaderStyle="{StaticResource HeadersStyle}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=PlayerName.FirstName}" Style="{StaticResource PlayerStyle}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Фамилия" HeaderStyle="{StaticResource HeadersStyle}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=PlayerName.LastName}" Style="{StaticResource PlayerStyle}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Позиция" Binding="{Binding Path=PlayerName.Position}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Club.Name}" Style="{StaticResource ClubStyle}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Г" Binding="{Binding Path=Goals}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="Пен" Binding="{Binding Path=PenGoals}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="П" Binding="{Binding Path=Assists}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="Г+П" Binding="{Binding Path=GoalPlusPass}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="И" Binding="{Binding Path=Matches}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="Мин" Binding="{Binding Path=Minutes}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="ЖК" Binding="{Binding Path=YellowCards}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="ЖКК" Binding="{Binding Path=YellowRedCards}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="КК" Binding="{Binding Path=RedCards}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="FP" Binding="{Binding Path=FairPlayScore}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Grid.Column="2">
+                
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:FootballTracker"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="HeadersStyle">
+            <Style.Setters>
+                <Setter Property="Control.HorizontalAlignment" Value="Center"/>
+            </Style.Setters>
+        </Style>
+        
     </Application.Resources>
 </Application>

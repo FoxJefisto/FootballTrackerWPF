@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FootballTracker.Controllers;
+using lesson1;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,35 @@ namespace FootballTracker
     /// </summary>
     public partial class MainWindow : Window
     {
+        public DataBaseManager dbManager;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            dbManager = DataBaseManager.GetInstance();
+            dgCompetitions.ItemsSource = dbManager.GetCompetitions();
+        }
+
+        private void tbCompetition_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var tb = sender as TextBlock;
+            var compWindow = new CompetitionWindow(tb.DataContext as Competition);
+            compWindow.Owner = this;
+            compWindow.Show();
+            this.Hide();
+        }
+
+        private void iconClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }
