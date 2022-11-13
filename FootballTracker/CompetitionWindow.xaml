@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FootballTracker"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="CompetitionWindow" Height="800" Width="1200" WindowStartupLocation="CenterOwner"
+        Title="CompetitionWindow" Height="800" Width="1500" WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded" WindowStyle="None"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
@@ -98,7 +98,7 @@
                         <DataGridTextColumn Header="О" Binding="{Binding Path=Points}" HeaderStyle="{StaticResource HeadersStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Margin="10">
                             <TextBlock HorizontalAlignment="Left">Бомбардиры</TextBlock>
@@ -194,19 +194,24 @@
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
-                <StackPanel Orientation="Horizontal" Margin="10">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Margin="10">Название:</TextBlock>
-                        <TextBlock Margin="10">Страна:</TextBlock>
-                        <TextBlock Margin="10">Сезон:</TextBlock>
-                        <TextBlock Margin="10">Статистика игроков:</TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock x:Name="tbCompName" Margin="20,10"/>
-                        <TextBlock x:Name="tbCompCountry" Margin="20,10"/>
-                        <ComboBox x:Name="cbSeasons" Margin="20,10" DisplayMemberPath="Year"
+                <StackPanel x:Name="spInfo" Orientation="Vertical" Margin="50,10">
+                    <Border Name="imgBorder" BorderThickness="1" BorderBrush="Black" Width="150" Height="150" HorizontalAlignment="Left">
+                        <Image Source="{Binding ImgSource}"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel>
+                            <TextBlock Text="Название:" Margin="0,15"/>
+                            <TextBlock Text="Страна:" Margin="0,15"/>
+                            <TextBlock Text="Сезон:" Margin="0,15"/>
+                            <TextBlock Text="Статистика игроков:" Margin="0,15"/>
+                        </StackPanel>
+                        <StackPanel Margin="20,0">
+                            <TextBlock Text="{Binding Name}" Margin="0,15"/>
+                            <TextBlock Text="{Binding Country}" Margin="0,15"/>
+                            <ComboBox x:Name="cbSeasons" Margin="0,15" DisplayMemberPath="Year"
                                   SelectionChanged="cbSeasons_SelectionChanged"/>
-                        <Button x:Name="btnShowPlayerStats" Margin="20,5" Content="Показать" Click="btnShowPlayerStats_Click"/>
+                            <Button x:Name="btnShowPlayerStats" Margin="0,15" Content="Показать" Click="btnShowPlayerStats_Click"/>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

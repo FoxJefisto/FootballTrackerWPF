@@ -40,8 +40,7 @@ namespace FootballTracker
         {
             Title = currentComp.Name;
             tbTitle.Text = currentComp.Name;
-            tbCompName.Text = currentComp.Name;
-            tbCompCountry.Text = currentComp.Country;
+            spInfo.DataContext = currentComp;
             seasons = dbManager.GetSeasonsByComp(currentComp);
             cbSeasons.ItemsSource = seasons;
             cbSeasons.SelectedItem = seasons[0];

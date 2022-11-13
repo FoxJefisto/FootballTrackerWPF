@@ -89,7 +89,11 @@ namespace FootballTracker.Controllers
             {
                 var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id && x.ClubId == club.Id)
                     .Include(x => x.Club).Include(x => x.PlayerName).ToList();
-                table.Sort(new ComparePosition());
+                try
+                {
+                    table.Sort(new ComparePosition());
+                }
+                catch { }
                 return table;
             }
         }

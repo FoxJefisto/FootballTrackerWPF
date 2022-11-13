@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FootballTracker"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ClubInfoWindow" Height="800" Width="1200" WindowStartupLocation="CenterOwner"
+        Title="ClubInfoWindow" Height="800" Width="1500" WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded" WindowStyle="None"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
@@ -74,7 +74,7 @@
                         <TextBlock>Состав</TextBlock>
                         <DataGrid x:Name="dgSquad" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="№" Binding="{Binding Path=PlayerName.Number}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="№" Binding="{Binding Path=Number}" HeaderStyle="{StaticResource HeadersStyle}"/>
                                 <DataGridTemplateColumn Header="Имя" HeaderStyle="{StaticResource HeadersStyle}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -99,31 +99,36 @@
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
-            <StackPanel Grid.Column="2" Margin="0,0,30,0" Orientation="Horizontal">
-                <StackPanel Margin="10">
-                    <TextBlock Text="Название:" Margin="0,10"/>
-                    <TextBlock Text="Название на английском:" Margin="0,10"/>
-                    <TextBlock Text="Полное название:" Margin="0,10"/>
-                    <TextBlock Text="Главный тренер:" Margin="0,10"/>
-                    <TextBlock Text="Город:" Margin="0,10"/>
-                    <TextBlock Text="Страна:" Margin="0,10"/>
-                    <TextBlock Text="Стадион:" Margin="0,10"/>
-                    <TextBlock Text="Дата основания:" Margin="0,10"/>
-                    <TextBlock Text="Рейтинг:" Margin="0,10"/>
-                    <TextBlock Text="Сезон:" Margin="0,10"/>
-                </StackPanel>
-                <StackPanel x:Name="spInfo" Margin="10">
-                    <TextBlock Text="{Binding Name}" Margin="0,10"/>
-                    <TextBlock Text="{Binding NameEnglish}" Margin="0,10"/>
-                    <TextBlock Text="{Binding FullName}" Margin="0,10"/>
-                    <TextBlock Text="{Binding MainCoach}" Margin="0,10"/>
-                    <TextBlock Text="{Binding City}" Margin="0,10"/>
-                    <TextBlock Text="{Binding Country}" Margin="0,10"/>
-                    <TextBlock Text="{Binding Stadium}" Margin="0,10"/>
-                    <TextBlock Text="{Binding FoundationDate}" Margin="0,10"/>
-                    <TextBlock Text="{Binding Rating}" Margin="0,10"/>
-                    <ComboBox x:Name="cbSeasons" Margin="0,10" DisplayMemberPath="Year"
+            <StackPanel x:Name="spInfo" Grid.Column="2" Orientation="Vertical" Margin="10">
+                <Border Name="imgBorder" BorderThickness="1" BorderBrush="Black" Width="150" Height="150" HorizontalAlignment="Left">
+                    <Image Source="{Binding ImgSource}"/>
+                </Border>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <TextBlock Text="Название:" Margin="0,10"/>
+                        <TextBlock Text="Название на английском:" Margin="0,10"/>
+                        <TextBlock Text="Полное название:" Margin="0,10"/>
+                        <TextBlock Text="Главный тренер:" Margin="0,10"/>
+                        <TextBlock Text="Город:" Margin="0,10"/>
+                        <TextBlock Text="Страна:" Margin="0,10"/>
+                        <TextBlock Text="Стадион:" Margin="0,10"/>
+                        <TextBlock Text="Дата основания:" Margin="0,10"/>
+                        <TextBlock Text="Рейтинг:" Margin="0,10"/>
+                        <TextBlock Text="Сезон:" Margin="0,10"/>
+                    </StackPanel>
+                    <StackPanel Margin="10,0">
+                        <TextBlock Text="{Binding Name}" Margin="0,10"/>
+                        <TextBlock Text="{Binding NameEnglish}" Margin="0,10"/>
+                        <TextBlock Text="{Binding FullName}" Margin="0,10"/>
+                        <TextBlock Text="{Binding MainCoach}" Margin="0,10"/>
+                        <TextBlock Text="{Binding City}" Margin="0,10"/>
+                        <TextBlock Text="{Binding Country}" Margin="0,10"/>
+                        <TextBlock Text="{Binding Stadium}" Margin="0,10"/>
+                        <TextBlock Text="{Binding FoundationDate}" Margin="0,10"/>
+                        <TextBlock Text="{Binding Rating}" Margin="0,10"/>
+                        <ComboBox x:Name="cbSeasons" Margin="0,10" DisplayMemberPath="Year"
                                   SelectionChanged="cbSeasons_SelectionChanged"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </Grid>

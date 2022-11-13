@@ -17,7 +17,7 @@ namespace lesson1
         public string? Stadium { get; set; }
         public string? FoundationDate { get; set; }
         public int? Rating { get; set; }
-        public List<FootballClubPlayer> ClubPlayer { get; set; } = new List<FootballClubPlayer>();
+        public string? ImgSource { get; set; }
         public List<FootballClubSeason> ClubsSeasons { get; set; } = new List<FootballClubSeason>();
     }
 }

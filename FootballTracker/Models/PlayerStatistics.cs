@@ -18,7 +18,7 @@ namespace lesson1
         public string? ClubId { get; set; }
         [ForeignKey("ClubId")]
         public FootballClub? Club { get; set; }
-
+        public int? Number { get; set; }
         public int Goals { get; set; }
         public int Assists { get; set; }
         public int Matches { get; set; }

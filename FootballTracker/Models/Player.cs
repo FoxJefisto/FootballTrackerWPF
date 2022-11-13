@@ -10,7 +10,6 @@ namespace lesson1
         public string? Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public int? Number { get; set; }
         public string? Position { get; set; }
         [Column(TypeName = "date")]
         public DateTime? DateOfBirth { get; set; }
@@ -20,7 +19,7 @@ namespace lesson1
         public string? OriginalName { get; set; }
         public string? Citizenship { get; set; }
         public string? PlaceOfBirth { get; set; }
+        public string? ImgSource { get; set; }
         public List<PlayerStatistics>? PlayerStatistics { get; set; }
-        public List<FootballClubPlayer> ClubPlayer { get; set; } = new List<FootballClubPlayer>();
     }
 }
