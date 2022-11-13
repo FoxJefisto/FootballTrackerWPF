@@ -59,7 +59,7 @@
             <RowDefinition Height="8*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Background="#FF1268BD">
+        <Grid x:Name="gBanner" Grid.Row="0" Background="#FF1268BD">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
@@ -67,9 +67,7 @@
             </Grid.ColumnDefinitions>
             <materialDesign:PackIcon Kind="ArrowLeft" MinWidth="50" MinHeight="50" Margin="30,15" Style="{StaticResource BackStyle}"/>
             <TextBlock x:Name="tbTitle" Grid.Column="1" FontSize="48" Foreground="White">Футбольный трекер</TextBlock>
-            <StackPanel Grid.Column="2" HorizontalAlignment="Right">
-                <materialDesign:PackIcon Kind="Close" MinWidth="50" MinHeight="50" Margin="15" Style="{StaticResource CloseStyle}"/>
-            </StackPanel>
+            <materialDesign:PackIcon Grid.Column="2" HorizontalAlignment="Right" Kind="Close" MinWidth="50" MinHeight="50" Margin="15" Style="{StaticResource CloseStyle}"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -157,6 +155,7 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="ГП" Binding="{Binding Path=Assists}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                    <DataGridTextColumn Header="И" Binding="{Binding Path=Matches}" HeaderStyle="{StaticResource HeadersStyle}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
@@ -189,6 +188,7 @@
                                     <DataGridTextColumn Header="ЖК" Binding="{Binding Path=YellowCards}" HeaderStyle="{StaticResource HeadersStyle}"/>
                                     <DataGridTextColumn Header="ЖКК" Binding="{Binding Path=YellowRedCards}" HeaderStyle="{StaticResource HeadersStyle}"/>
                                     <DataGridTextColumn Header="КК" Binding="{Binding Path=RedCards}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                    <DataGridTextColumn Header="И" Binding="{Binding Path=Matches}" HeaderStyle="{StaticResource HeadersStyle}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>

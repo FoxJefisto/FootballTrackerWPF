@@ -1,5 +1,6 @@
 ﻿using FootballTracker.Controllers;
 using lesson1;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace FootballTracker
         Competition currentComp;
         DataBaseManager dbManager;
         List<Season> seasons;
+        ColorWorker colorWorker;
         public CompetitionWindow()
         {
             InitializeComponent();
@@ -34,10 +36,24 @@ namespace FootballTracker
         {
             this.currentComp = comp;
             this.dbManager = DataBaseManager.GetInstance();
+            colorWorker = ColorWorker.GetInstance();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            var items = colorWorker.GetBannerColors(currentComp.ImgSource);
+            gBanner.Background = items.background;
+            foreach (var control in gBanner.Children)
+            {
+                if (control is TextBlock tb)
+                {
+                    tb.Foreground = items.foreground1;
+                }
+                else if (control is PackIcon pi)
+                {
+                    pi.Foreground = items.foreground2;
+                }
+            }
             Title = currentComp.Name;
             tbTitle.Text = currentComp.Name;
             spInfo.DataContext = currentComp;

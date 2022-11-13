@@ -1,5 +1,6 @@
 ﻿using FootballTracker.Controllers;
 using lesson1;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace FootballTracker
     {
         Player player;
         DataBaseManager dbManager;
+        ColorWorker colorWorker;
         public PlayerInfoWindow()
         {
             InitializeComponent();
@@ -32,10 +34,24 @@ namespace FootballTracker
         {
             this.player = player;
             this.dbManager = DataBaseManager.GetInstance();
+            colorWorker = ColorWorker.GetInstance();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            var items = colorWorker.GetBannerColors(player.PlayerStatistics.First().Club.ImgSource);
+            gBanner.Background = items.background;
+            foreach (var control in gBanner.Children)
+            {
+                if (control is TextBlock tb)
+                {
+                    tb.Foreground = items.foreground1;
+                }
+                else if (control is PackIcon pi)
+                {
+                    pi.Foreground = items.foreground2;
+                }
+            }
             Title = String.Join(' ', player.FirstName, player.LastName);
             tbTitle.Text = String.Join(' ', player.FirstName, player.LastName); ;
             spInfo.DataContext = player;
@@ -48,6 +64,7 @@ namespace FootballTracker
             var compWindow = new CompetitionWindow((tb.DataContext as PlayerStatistics).Season.Competition);
             compWindow.Owner = this;
             compWindow.Show();
+            this.Hide();
         }
 
         private void tbClubName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -56,6 +73,7 @@ namespace FootballTracker
             var clubInfoWindow = new ClubInfoWindow((tb.DataContext as PlayerStatistics).Club);
             clubInfoWindow.Owner = this;
             clubInfoWindow.Show();
+            this.Hide();
         }
 
         private void iconClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using FootballTracker.Controllers;
 using lesson1;
+using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace FootballTracker
     {
         DataBaseManager dbManager;
         Season season;
+        ColorWorker colorWorker;
         public CompetitionPlayersWindow()
         {
             InitializeComponent();
@@ -34,10 +36,24 @@ namespace FootballTracker
         {
             this.season = season;
             dbManager = DataBaseManager.GetInstance();
+            colorWorker = ColorWorker.GetInstance();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            var items = colorWorker.GetBannerColors(season.Competition.ImgSource);
+            gBanner.Background = items.background;
+            foreach (var control in gBanner.Children)
+            {
+                if (control is TextBlock tb)
+                {
+                    tb.Foreground = items.foreground1;
+                }
+                else if (control is PackIcon pi)
+                {
+                    pi.Foreground = items.foreground2;
+                }
+            }
             Title = $"{season.Competition.Name} Сезон: {season.Year}";
             tbTitle.Text = $"{season.Competition.Name} Сезон: {season.Year}";
             dgPlayerStats.ItemsSource = dbManager.GetPlayerStatisticsBySeason(season); 

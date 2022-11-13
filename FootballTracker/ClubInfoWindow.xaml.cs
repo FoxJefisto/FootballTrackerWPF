@@ -1,5 +1,7 @@
 ﻿using FootballTracker.Controllers;
+using ImageMagick;
 using lesson1;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,7 @@ namespace FootballTracker
     {
         DataBaseManager dbManager;
         FootballClub club;
+        ColorWorker colorWorker;
         public ClubInfoWindow()
         {
             InitializeComponent();
@@ -32,10 +35,26 @@ namespace FootballTracker
         {
             this.club = club;
             this.dbManager = DataBaseManager.GetInstance();
+            colorWorker = ColorWorker.GetInstance();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            var items = colorWorker.GetBannerColors(club.ImgSource);
+            gBanner.Background = items.background;
+            foreach(var control in gBanner.Children)
+            {
+                if (control is TextBlock tb)
+                {
+                    tb.Foreground = items.foreground1;
+                }
+                else if (control is PackIcon pi)
+                {
+                    pi.Foreground = items.foreground2;
+                }
+            }
+
+            
             Title = club.Name;
             tbTitle.Text = club.Name;
             spInfo.DataContext = club;
