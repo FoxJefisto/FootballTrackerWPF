@@ -30,7 +30,7 @@ namespace FootballTracker
             InitializeComponent();
         }
 
-        public PlayerInfoWindow(Player player): this()
+        public PlayerInfoWindow(Player player) : this()
         {
             this.player = player;
             this.dbManager = DataBaseManager.GetInstance();
@@ -39,7 +39,8 @@ namespace FootballTracker
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var items = colorWorker.GetBannerColors(player.PlayerStatistics.First().Club.ImgSource);
+            var playerStatistics = dbManager.GetPlayerStatisticsByPlayer(player);
+            var items = colorWorker.GetBannerColors(playerStatistics.First().Club.ImgSource);
             gBanner.Background = items.background;
             foreach (var control in gBanner.Children)
             {
@@ -55,25 +56,43 @@ namespace FootballTracker
             Title = String.Join(' ', player.FirstName, player.LastName);
             tbTitle.Text = String.Join(' ', player.FirstName, player.LastName); ;
             spInfo.DataContext = player;
-            dgStats.ItemsSource = dbManager.GetPlayerStatisticsByPlayer(player);
+            dgStats.ItemsSource = playerStatistics;
+            dgResultStats.ItemsSource = dbManager.GetResultsByPlayerStatistics(playerStatistics);
+            dgClubs.ItemsSource = dbManager.GetCurrentClubsByPlayer(player);
+            spCountry.DataContext = dbManager.GetCountryByName(player.Citizenship);
         }
 
         private void tbCompetition_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var tb = sender as TextBlock;
-            var compWindow = new CompetitionWindow((tb.DataContext as PlayerStatistics).Season.Competition);
-            compWindow.Owner = this;
-            compWindow.Show();
-            this.Hide();
+            var tb = sender as FrameworkElement;
+            if(tb.DataContext is PlayerStatistics ps && ps.Season is Season season && season.Competition is Competition comp)
+            {
+                var compWindow = new CompetitionWindow(comp);
+                compWindow.Owner = this;
+                compWindow.Show();
+                this.Hide();
+            }
         }
 
         private void tbClubName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var tb = sender as TextBlock;
-            var clubInfoWindow = new ClubInfoWindow((tb.DataContext as PlayerStatistics).Club);
-            clubInfoWindow.Owner = this;
-            clubInfoWindow.Show();
-            this.Hide();
+            var element = sender as FrameworkElement;
+            FootballClub club = null;
+            if (element.DataContext is FootballClub c)
+            {
+                club = c;
+            }
+            else if (element.DataContext is PlayerStatistics ps)
+            {
+                club = ps.Club;
+            }
+            if(club != null)
+            {
+                var clubInfoWindow = new ClubInfoWindow(club);
+                clubInfoWindow.Owner = this;
+                clubInfoWindow.Show();
+                this.Hide();
+            }
         }
 
         private void iconClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

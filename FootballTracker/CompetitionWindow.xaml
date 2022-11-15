@@ -16,6 +16,7 @@
                 <Trigger Property="Control.IsMouseOver" Value="True">
                     <Setter Property="Control.Cursor" Value="Hand"/>
                     <Setter Property="Control.Foreground" Value="Red"/>
+                    <Setter Property="Control.Opacity" Value="0.8"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -25,6 +26,7 @@
                 <Trigger Property="Control.IsMouseOver" Value="True">
                     <Setter Property="Control.Cursor" Value="Hand"/>
                     <Setter Property="Control.Foreground" Value="Red"/>
+                    <Setter Property="Control.Opacity" Value="0.8"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -37,6 +39,7 @@
                 <Trigger Property="Control.IsMouseOver" Value="True">
                     <Setter Property="Control.Cursor" Value="Hand"/>
                     <Setter Property="Control.Foreground" Value="Red"/>
+                    <Setter Property="Control.Opacity" Value="0.8"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -49,6 +52,7 @@
                 <Trigger Property="Control.IsMouseOver" Value="True">
                     <Setter Property="Control.Cursor" Value="Hand"/>
                     <Setter Property="Control.Foreground" Value="Red"/>
+                    <Setter Property="Control.Opacity" Value="0.8"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -76,32 +80,46 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <DataGrid x:Name="dgCompetitionTable" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="№" Binding="{Binding Path=Position}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Club.Name}" Style="{StaticResource ClubStyle}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="И" Binding="{Binding Path=GamesPlayed}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTextColumn Header="В" Binding="{Binding Path=GamesWon}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTextColumn Header="Н" Binding="{Binding Path=GamesDrawn}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTextColumn Header="П" Binding="{Binding Path=GamesLost}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTextColumn Header="З" Binding="{Binding Path=GoalsScored}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTextColumn Header="П" Binding="{Binding Path=GoalsMissed}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTextColumn Header="+/-" Binding="{Binding Path=GoalsDifference}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        <DataGridTextColumn Header="О" Binding="{Binding Path=Points}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <StackPanel Orientation="Vertical">
+                    <ComboBox x:Name="cbGroups" Margin="10,10,160,10" Visibility="Collapsed"
+                              SelectionChanged="cbGroups_SelectionChanged"/>
+                    <DataGrid x:Name="dgCompetitionTable" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding Path=Position}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="{Binding Club.ImgSource}" Margin="5,0" Width="20" Height="20" Style="{StaticResource ClubStyle}"/>
+                                            <TextBlock Text="{Binding Path=Club.Name}" Style="{StaticResource ClubStyle}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="И" Binding="{Binding Path=GamesPlayed}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="В" Binding="{Binding Path=GamesWon}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="Н" Binding="{Binding Path=GamesDrawn}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="П" Binding="{Binding Path=GamesLost}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="З" Binding="{Binding Path=GoalsScored}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="П" Binding="{Binding Path=GoalsMissed}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="+/-" Binding="{Binding Path=GoalsDifference}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            <DataGridTextColumn Header="О" Binding="{Binding Path=Points}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
                 <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Margin="10">
+                    <UniformGrid Rows="3">
+                        <StackPanel Margin="10" HorizontalAlignment="Left">
                             <TextBlock HorizontalAlignment="Left">Бомбардиры</TextBlock>
                             <DataGrid x:Name="dgBombarders" AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding PlayerName.ImgSource}" Width="30" Height="30" Style="{StaticResource PlayerStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Header="Имя" HeaderStyle="{StaticResource HeadersStyle}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -119,7 +137,10 @@
                                     <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Club.Name}" Style="{StaticResource ClubStyle}"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding Club.ImgSource}" Margin="5,0" Width="20" Height="20" Style="{StaticResource ClubStyle}"/>
+                                                    <TextBlock Text="{Binding Path=Club.Name}" Margin="0,5" Style="{StaticResource ClubStyle}"/>
+                                                </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -129,10 +150,17 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
-                        <StackPanel Margin="10">
+                        <StackPanel Margin="10" HorizontalAlignment="Left">
                             <TextBlock HorizontalAlignment="Left">Ассистенты</TextBlock>
                             <DataGrid x:Name="dgAssistants" AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding PlayerName.ImgSource}" Width="30" Height="30" Style="{StaticResource PlayerStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Header="Имя" HeaderStyle="{StaticResource HeadersStyle}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -150,7 +178,10 @@
                                     <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Club.Name}" Style="{StaticResource ClubStyle}"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding Club.ImgSource}" Margin="5,0" Width="20" Height="20" Style="{StaticResource ClubStyle}"/>
+                                                    <TextBlock Text="{Binding Path=Club.Name}" Margin="0,5" Style="{StaticResource ClubStyle}"/>
+                                                </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -159,10 +190,17 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
-                        <StackPanel Margin="10">
+                        <StackPanel Margin="10" HorizontalAlignment="Left">
                             <TextBlock HorizontalAlignment="Left">Штрафники</TextBlock>
                             <DataGrid x:Name="dgRudePlayers" AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding PlayerName.ImgSource}" Width="30" Height="30" Style="{StaticResource PlayerStyle}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Header="Имя" HeaderStyle="{StaticResource HeadersStyle}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -180,7 +218,10 @@
                                     <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Club.Name}" Style="{StaticResource ClubStyle}"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding Club.ImgSource}"  Margin="5,0" Width="20" Height="20" Style="{StaticResource ClubStyle}"/>
+                                                    <TextBlock Text="{Binding Path=Club.Name}" Margin="0,5" Style="{StaticResource ClubStyle}"/>
+                                                </StackPanel>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -192,7 +233,7 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
-                    </StackPanel>
+                    </UniformGrid>
                 </ScrollViewer>
                 <StackPanel x:Name="spInfo" Orientation="Vertical" Margin="50,10">
                     <Border Name="imgBorder" BorderThickness="1" BorderBrush="Black" Width="150" Height="150" HorizontalAlignment="Left">
@@ -207,8 +248,11 @@
                         </StackPanel>
                         <StackPanel Margin="20,0">
                             <TextBlock Text="{Binding Name}" Margin="0,15"/>
-                            <TextBlock Text="{Binding Country}" Margin="0,15"/>
-                            <ComboBox x:Name="cbSeasons" Margin="0,15" DisplayMemberPath="Year"
+                            <StackPanel x:Name="spCountry" Margin="0,15" Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Name}" Style="{StaticResource ClubStyle}"/>
+                                <Image Source="{Binding Path=ImgSource}" Margin="5,0" Width="20" Height="20" Style="{StaticResource ClubStyle}"/>
+                            </StackPanel>
+                            <ComboBox x:Name="cbSeasons" HorizontalAlignment="Left" Margin="0,15" DisplayMemberPath="Year"
                                   SelectionChanged="cbSeasons_SelectionChanged"/>
                             <Button x:Name="btnShowPlayerStats" Margin="0,15" Content="Показать" Click="btnShowPlayerStats_Click"/>
                         </StackPanel>

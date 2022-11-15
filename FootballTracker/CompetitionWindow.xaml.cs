@@ -23,7 +23,7 @@ namespace FootballTracker
     /// </summary>
     public partial class CompetitionWindow : Window
     {
-        Competition currentComp;
+        Competition competition;
         DataBaseManager dbManager;
         List<Season> seasons;
         ColorWorker colorWorker;
@@ -34,14 +34,14 @@ namespace FootballTracker
 
         public CompetitionWindow(Competition comp) : this()
         {
-            this.currentComp = comp;
+            this.competition = comp;
             this.dbManager = DataBaseManager.GetInstance();
             colorWorker = ColorWorker.GetInstance();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var items = colorWorker.GetBannerColors(currentComp.ImgSource);
+            var items = colorWorker.GetBannerColors(competition.ImgSource);
             gBanner.Background = items.background;
             foreach (var control in gBanner.Children)
             {
@@ -54,18 +54,31 @@ namespace FootballTracker
                     pi.Foreground = items.foreground2;
                 }
             }
-            Title = currentComp.Name;
-            tbTitle.Text = currentComp.Name;
-            spInfo.DataContext = currentComp;
-            seasons = dbManager.GetSeasonsByComp(currentComp);
+            Title = competition.Name;
+            tbTitle.Text = competition.Name;
+            spInfo.DataContext = competition;
+            seasons = dbManager.GetSeasonsByComp(competition);
             cbSeasons.ItemsSource = seasons;
             cbSeasons.SelectedItem = seasons[0];
+            spCountry.DataContext = dbManager.GetCountryByName(competition.Country);
         }
 
         private void cbSeasons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var season = cbSeasons.SelectedItem as Season;
-            dgCompetitionTable.ItemsSource = dbManager.GetCompetitionTable(season);
+            var groups = dbManager.GetCompetitionGroupNames(season);
+            if (groups.Count > 1)
+            {
+                cbGroups.ItemsSource = groups;
+                cbGroups.SelectedItem = groups[1];
+                cbGroups.SelectedItem = groups[0];
+                cbGroups.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                dgCompetitionTable.ItemsSource = dbManager.GetCompetitionTable(season);
+                cbGroups.Visibility = Visibility.Collapsed;
+            }
             dgBombarders.ItemsSource = dbManager.GetBombarders(season);
             dgAssistants.ItemsSource = dbManager.GetAssistants(season);
             dgRudePlayers.ItemsSource = dbManager.GetRudePlayers(season);
@@ -73,29 +86,40 @@ namespace FootballTracker
 
         private void tbClubName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var tb = sender as TextBlock;
+            var element = sender as FrameworkElement;
             FootballClub club = null;
-            if(tb.DataContext is CompetitionTable ct)
+            if(element.DataContext is CompetitionTable ct)
             {
                 club = ct.Club;
             } 
-            else if (tb.DataContext is PlayerStatistics ps)
+            else if (element.DataContext is PlayerStatistics ps)
             {
                 club = ps.Club;
             }
-            var clubInfoWindow = new ClubInfoWindow(club);
-            clubInfoWindow.Owner = this;
-            this.Hide();
-            clubInfoWindow.Show();
+            else if (element.DataContext is FootballClub c)
+            {
+                club = c;
+            }
+            if (club != null)
+            {
+                var clubInfoWindow = new ClubInfoWindow(club);
+                clubInfoWindow.Owner = this;
+                this.Hide();
+                clubInfoWindow.Show();
+            }
+
         }
 
         private void tbPlayerName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var tb = sender as TextBlock;
-            var clubInfoWindow = new PlayerInfoWindow((tb.DataContext as PlayerStatistics).PlayerName);
-            clubInfoWindow.Owner = this;
-            this.Hide();
-            clubInfoWindow.Show();
+            var element = sender as FrameworkElement;
+            if(element.DataContext is PlayerStatistics ps && ps.PlayerName is Player player)
+            {
+                var clubInfoWindow = new PlayerInfoWindow(player);
+                clubInfoWindow.Owner = this;
+                this.Hide();
+                clubInfoWindow.Show();
+            }
         }
 
         private void btnShowPlayerStats_Click(object sender, RoutedEventArgs e)
@@ -120,6 +144,14 @@ namespace FootballTracker
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
+        }
+
+        private void cbGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var groupName = cbGroups.SelectedItem as string;
+            var season = cbSeasons.SelectedItem as Season;
+            var table = dbManager.GetCompetitionTableByGroupName(season, groupName);
+            dgCompetitionTable.ItemsSource = table;
         }
     }
 }

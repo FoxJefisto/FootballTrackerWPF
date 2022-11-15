@@ -16,6 +16,7 @@
                 <Trigger Property="Control.IsMouseOver" Value="True">
                     <Setter Property="Control.Cursor" Value="Hand"/>
                     <Setter Property="Control.Foreground" Value="Red"/>
+                    <Setter Property="Control.Opacity" Value="0.8"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -28,6 +29,7 @@
                 <Trigger Property="Control.IsMouseOver" Value="True">
                     <Setter Property="Control.Cursor" Value="Hand"/>
                     <Setter Property="Control.Foreground" Value="Red"/>
+                    <Setter Property="Control.Opacity" Value="0.8"/>
                 </Trigger>
             </Style.Triggers>
         </Style>

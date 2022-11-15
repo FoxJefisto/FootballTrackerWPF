@@ -44,8 +44,16 @@ namespace FootballTracker.Controllers
                         foreground2 = new SolidColorBrush(color2);
                         if (BrushesIsEqual(background, foreground1) || BrushesIsEqual(background, foreground2))
                         {
-                            foreground1 = new SolidColorBrush(InverseColor(foreground1.Color));
-                            foreground2 = new SolidColorBrush(InverseColor(foreground2.Color));
+                            if(BrushesColorsIsEqual(background, foreground1) || BrushesColorsIsEqual(background, foreground2))
+                            {
+                                foreground1 = new SolidColorBrush(InverseColor(background.Color));
+                                foreground2 = new SolidColorBrush(InverseColor(background.Color));
+                            }
+                            else
+                            {
+                                foreground1 = new SolidColorBrush(InverseColor(foreground1.Color));
+                                foreground2 = new SolidColorBrush(InverseColor(foreground2.Color));
+                            }
                         }
                     }
                 }
@@ -86,7 +94,14 @@ namespace FootballTracker.Controllers
 
         private bool BrushesIsEqual(SolidColorBrush x, SolidColorBrush y)
         {
-            return (Math.Abs(x.Color.R - y.Color.R) <= 30 && Math.Abs(x.Color.G - y.Color.G) <= 30 && Math.Abs(x.Color.B - y.Color.B) <= 30);
+            var result = Math.Abs(x.Color.R - y.Color.R) <= 30 && Math.Abs(x.Color.G - y.Color.G) <= 30 && Math.Abs(x.Color.B - y.Color.B) <= 30;
+            return result;
+        }
+
+        private bool BrushesColorsIsEqual(SolidColorBrush x, SolidColorBrush y)
+        {
+            var result = x.Color.R == x.Color.G && x.Color.G == x.Color.B && y.Color.R == y.Color.G && y.Color.G == y.Color.B;
+            return result;
         }
 
         private ColorWorker() { }
