@@ -9,6 +9,5 @@
                 <Setter Property="Control.HorizontalAlignment" Value="Center"/>
             </Style.Setters>
         </Style>
-        
     </Application.Resources>
 </Application>

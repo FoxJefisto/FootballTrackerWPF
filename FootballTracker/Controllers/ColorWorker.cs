@@ -36,8 +36,6 @@ namespace FootballTracker.Controllers
                         var dict = image.Histogram();
                         var colors = dict.OrderByDescending(x => x.Value).Select(x => x.Key).Take(4).ToArray();
                         background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1].ToHexString()));
-                        //foreground1 = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[2].ToHexString()));
-                        //foreground2 = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[3].ToHexString()));
                         var color1 = AverageColor(colors.Where((x, i) => i % 2 == 0).ToArray());
                         var color2 = AverageColor(colors);
                         foreground1 = new SolidColorBrush(color1);

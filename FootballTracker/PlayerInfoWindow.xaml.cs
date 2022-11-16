@@ -60,6 +60,7 @@ namespace FootballTracker
             dgResultStats.ItemsSource = dbManager.GetResultsByPlayerStatistics(playerStatistics);
             dgClubs.ItemsSource = dbManager.GetCurrentClubsByPlayer(player);
             spCountry.DataContext = dbManager.GetCountryByName(player.Citizenship);
+            tbAge.Text = $"({dbManager.GetAgeString(player.DateOfBirth)})";
         }
 
         private void tbCompetition_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -31,7 +31,7 @@ namespace FootballTracker.Controllers
         {
             using (AppContext db = new AppContext())
             {
-                return db.Competitions.ToList();
+                return db.Competitions.OrderByDescending(x => x.Country).ToList();
             }
         }
 
@@ -83,7 +83,7 @@ namespace FootballTracker.Controllers
         {
             using (AppContext db = new AppContext())
             {
-                var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id && x.PlayerId != null).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.Goals).Take(10).ToList();
+                var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.Goals).Take(10).ToList();
                 return table;
             }
         }
@@ -92,7 +92,7 @@ namespace FootballTracker.Controllers
         {
             using (AppContext db = new AppContext())
             {
-                var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id && x.PlayerId != null).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.Assists).Take(10).ToList();
+                var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.Assists).Take(10).ToList();
                 return table;
             }
         }
@@ -101,24 +101,23 @@ namespace FootballTracker.Controllers
         {
             using (AppContext db = new AppContext())
             {
-                var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id && x.PlayerId != null).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.FairPlayScore).Take(10).ToList();
+                var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.FairPlayScore).Take(10).ToList();
                 return table;
             }
         }
 
-        public List<Player> GetSquadPlayers(FootballClub club, string seasonYear)
+        public List<PlayerStatistics> GetSquadPlayers(FootballClub club, string seasonYear)
         {
             using (AppContext db = new AppContext())
             {
-                var players = db.PlayerStatistics.Where(x => x.Season.Year == seasonYear && x.ClubId == club.Id && x.PlayerId != null)
-                    .Include(x => x.Club).Include(x => x.PlayerName).GroupBy(x => x.PlayerId).Select(x => x.Key);
-                var result = db.Players.Where(x => players.Contains(x.Id)).ToList();
+                var players = db.PlayerStatistics.Where(x => x.Season.Year == seasonYear && x.ClubId == club.Id)
+                    .Include(x => x.Club).Include(x => x.PlayerName).AsEnumerable().DistinctBy(x => x.Label).ToList();
                 try
                 {
-                    result.Sort(new ComparePosition());
+                    players.Sort(new ComparePosition());
                 }
                 catch { }
-                return result;
+                return players;
             }
         }
 
@@ -214,12 +213,39 @@ namespace FootballTracker.Controllers
             }
         }
 
+        public string? GetAgeString(DateTime? date)
+        {
+            if (date is DateTime birthdate)
+            {
+                var today = DateTime.Today;
+                var age = today.Year - birthdate.Year;
+                if (birthdate.Date > today.AddYears(-age)) age--;
+                string yearStr;
+                switch(age % 10)
+                {
+                    case 1:
+                        yearStr = " год";
+                        break;
+                    case 2:
+                    case 3:
+                    case 4:
+                        yearStr = " года";
+                        break;
+                    default:
+                        yearStr = " лет";
+                        break;
+                }
+                return age.ToString() + yearStr;
+            }
+            else return null;
+        }
+
         private DataBaseManager() { }
 
 
     }
 
-    public class ComparePosition : IComparer<Player>
+    public class ComparePosition : IComparer<PlayerStatistics>
     {
         private Dictionary<string?, int> positionPriority = new Dictionary<string?, int>()
         {
@@ -228,11 +254,11 @@ namespace FootballTracker.Controllers
             { "полузащитник", 2 },
             { "нападающий", 3 }
         };
-        public int Compare(Player x, Player y)
+        public int Compare(PlayerStatistics x, PlayerStatistics y)
         {
-            if (x != null && y != null && x.Position != null && y.Position != null)
+            if (x.PlayerName != null && y.PlayerName != null && x.PlayerName.Position != null && y.PlayerName.Position != null)
             {
-                return positionPriority[x.Position].CompareTo(positionPriority[y.Position]);
+                return positionPriority[x.PlayerName.Position].CompareTo(positionPriority[y.PlayerName.Position]);
             }
             else
             {

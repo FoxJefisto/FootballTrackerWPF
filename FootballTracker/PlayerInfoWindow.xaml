@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="PlayerInfoWindow" Height="800" Width="1500"
         Loaded="Window_Loaded" WindowStyle="None"
+        WindowStartupLocation="CenterOwner"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <Style x:Key="CompetitionStyle">
@@ -76,7 +77,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="10*"/>
                 <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1">
@@ -84,7 +85,7 @@
                     <RowDefinition Height="7*"/>
                     <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
-                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="10">
+                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10">
                     <StackPanel Orientation="Vertical">
                         <DataGrid x:Name="dgStats" HorizontalAlignment="Left" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
@@ -92,9 +93,9 @@
                                 <DataGridTemplateColumn Header="Соревнование" MinWidth="100">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="{Binding Path=Season.Competition.ImgSource}" Margin="5,0" Width="20" Height="20" Style="{StaticResource CompetitionStyle}"/>
-                                                <TextBlock Text="{Binding Path=Season.Competition.Name}" Style="{StaticResource CompetitionStyle}"/>
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompetitionStyle}">
+                                                <Image Source="{Binding Path=Season.Competition.ImgSource}" Margin="5,0" Width="20" Height="20" />
+                                                <TextBlock Text="{Binding Path=Season.Competition.Name}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -103,9 +104,9 @@
                                 <DataGridTemplateColumn Header="Команда">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="{Binding Path=Club.ImgSource}" Margin="5,0" Width="20" Height="20" Style="{StaticResource ClubStyle}"/>
-                                                <TextBlock Text="{Binding Path=Club.Name}" Style="{StaticResource ClubStyle}"/>
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource ClubStyle}">
+                                                <Image Source="{Binding Path=Club.ImgSource}" Margin="5,0" Width="20" Height="20"/>
+                                                <TextBlock Text="{Binding Path=Club.Name}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -164,11 +165,14 @@
                         <TextBlock Text="{Binding LastName}" Margin="0,10"/>
                         <TextBlock Text="{Binding OriginalName}" Margin="0,10"/>
                         <TextBlock Text="{Binding Position}" Margin="0,10"/>
-                        <TextBlock Text="{Binding DateOfBirth, StringFormat=dd-MM-yyyy}" Margin="0,10"/>
+                        <StackPanel Margin="0,10" Orientation="Horizontal">
+                            <TextBlock Text="{Binding DateOfBirth, StringFormat=dd-MM-yyyy}"/>
+                            <TextBlock x:Name="tbAge" Margin="5,0"/>
+                        </StackPanel>
                         <TextBlock Text="{Binding PlaceOfBirth}" Margin="0,10"/>
-                        <StackPanel x:Name="spCountry" Margin="0,10" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=Name}" Style="{StaticResource ClubStyle}"/>
-                            <Image Source="{Binding Path=ImgSource}" Margin="5,0" Width="16" Height="16" Style="{StaticResource ClubStyle}"/>
+                        <StackPanel x:Name="spCountry" Margin="0,10" Orientation="Horizontal" Style="{StaticResource ClubStyle}">
+                            <TextBlock Text="{Binding Path=Name}"/>
+                            <Image Source="{Binding Path=ImgSource}" Margin="5,0" Width="16" Height="16"/>
                         </StackPanel>
                         <TextBlock Text="{Binding Height}" Margin="0,10"/>
                         <TextBlock Text="{Binding Weight}" Margin="0,10"/>
@@ -178,9 +182,9 @@
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Path=Name}" Style="{StaticResource ClubStyle}"/>
-                                                <Image Source="{Binding Path=ImgSource}" Margin="5,0" Width="16" Height="16" Style="{StaticResource ClubStyle}"/>
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource ClubStyle}">
+                                                <TextBlock Text="{Binding Path=Name}"/>
+                                                <Image Source="{Binding Path=ImgSource}" Margin="5,0" Width="16" Height="16"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>

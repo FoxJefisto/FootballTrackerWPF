@@ -83,7 +83,7 @@ namespace FootballTracker
         private void tbPlayerName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var element = sender as FrameworkElement;
-            if (element.DataContext is Player player)
+            if (element.DataContext is PlayerStatistics ps && ps.PlayerName is Player player)
             {
                 var clubInfoWindow = new PlayerInfoWindow(player);
                 clubInfoWindow.Owner = this;

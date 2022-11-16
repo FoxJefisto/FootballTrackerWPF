@@ -26,7 +26,7 @@ namespace FootballTracker.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS; DATABASE=FootballDB; Trusted_Connection=True; TrustServerCertificate=Yes;");
+            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS; DATABASE=SoccerDB; Trusted_Connection=True; TrustServerCertificate=Yes;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

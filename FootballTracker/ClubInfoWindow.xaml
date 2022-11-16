@@ -95,39 +95,29 @@
                         <TextBlock>Состав</TextBlock>
                         <DataGrid x:Name="dgSquad" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Image Source="{Binding Path=ImgSource}" Width="50" Height="50" Style="{StaticResource PlayerStyle}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="№" Binding="{Binding Path=Number}" HeaderStyle="{StaticResource HeadersStyle}"/>
                                 <DataGridTemplateColumn Header="Имя" HeaderStyle="{StaticResource HeadersStyle}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=FirstName}" Style="{StaticResource PlayerStyle}"/>
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource PlayerStyle}">
+                                                <Image Source="{Binding PlayerName.ImgSource}" Margin="2,0" Width="40" Height="40"/>
+                                                <TextBlock Text="{Binding Path=Label}" Margin="2,0"/>
+                                            </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Фамилия" HeaderStyle="{StaticResource HeadersStyle}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=LastName}" Style="{StaticResource PlayerStyle}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Позиция" Binding="{Binding Path=Position}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="Позиция" Binding="{Binding Path=PlayerName.Position}" HeaderStyle="{StaticResource HeadersStyle}"/>
                                 <DataGridTemplateColumn Header="Страна" HeaderStyle="{StaticResource HeadersStyle}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Citizenship}" Style="{StaticResource ClubStyle}"/>
+                                            <TextBlock Text="{Binding Path=PlayerName.Citizenship}" Style="{StaticResource ClubStyle}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Path=DateOfBirth, StringFormat=dd-MM-yyyy}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                                <DataGridTextColumn Header="Рост" Binding="{Binding Path=Height}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                                <DataGridTextColumn Header="Вес" Binding="{Binding Path=Weight}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                                <DataGridTextColumn Header="Рабочая нога" Binding="{Binding Path=WorkingLeg}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Path=PlayerName.DateOfBirth, StringFormat=dd-MM-yyyy}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="Рост" Binding="{Binding Path=PlayerName.Height}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="Вес" Binding="{Binding Path=PlayerName.Weight}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="Рабочая нога" Binding="{Binding Path=PlayerName.WorkingLeg}" HeaderStyle="{StaticResource HeadersStyle}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
