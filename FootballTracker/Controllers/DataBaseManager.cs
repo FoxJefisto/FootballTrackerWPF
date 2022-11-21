@@ -1,5 +1,6 @@
 ﻿using FootballTracker.Models;
 using lesson1;
+using lesson1.Model;
 using MaterialDesignThemes.Wpf.Converters;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -195,7 +196,7 @@ namespace FootballTracker.Controllers
                 PenGoals = x.Sum(y => y.PenGoals),
                 DoubleGoals = x.Sum(y => y.DoubleGoals),
                 HatTricks = x.Sum(y => y.HatTricks),
-                AutoGoals = x.Sum(y => y.AutoGoals),
+                OwnGoals = x.Sum(y => y.OwnGoals),
                 YellowCards = x.Sum(y => y.YellowCards),
                 YellowRedCards = x.Sum(y => y.YellowRedCards),
                 RedCards = x.Sum(y => y.RedCards),
@@ -240,12 +241,99 @@ namespace FootballTracker.Controllers
             else return null;
         }
 
+        public List<FootballClub> GetClubsBySeason(Season season)
+        {
+            using (var db = new AppContext())
+            {
+                var result = db.ClubsSeasons.Include(x => x.Club).Where(x => x.SeasonId == season.Id).Select(x => x.Club).OrderBy(x => x.Name).ToList();
+                return result;
+            }
+        }
+
+        public FootballMatch GetMatchByMatchId(string? matchId)
+        {
+            using (var db = new AppContext())
+            {
+                var result = db.Matches.Include(x => x.Statistics).First(x => x.Id == matchId);
+                return result;
+            }
+        }
+
+        public List<MatchEvent> GetMatchEventsByStatisticsId(MatchStatistics stats)
+        {
+            using (var db = new AppContext())
+            {
+                var result = db.MatchEvents.Where(x => x.StatisticsId == stats.Id).Include(x => x.Player).ToList();
+                return result;
+            }
+        }
+
+        public (List<string> homeStats, List<string> awayStats) SplitMatchStatistics(List<MatchStatistics> ms)
+        {
+            var homeStats = new List<string> { $"{ms[0].Xg}", $"{ms[0].Shots}", $"{ms[0].ShotsOnTarget}",
+            $"{ms[0].ShotsBlocked}", $"{ms[0].Saves}", $"{ms[0].BallPossession}", $"{ms[0].Corners}",
+            $"{ms[0].Fouls}", $"{ms[0].Offsides}", $"{ms[0].YCards}", $"{ms[0].RCards}", $"{ms[0].Attacks}",
+            $"{ms[0].AttacksDangerous}", $"{ms[0].Passes}", $"{ms[0].AccPasses}", $"{ms[0].FreeKicks}",
+            $"{ms[0].Prowing}", $"{ms[0].Crosses}", $"{ms[0].Tackles}"};
+            var awayStats = new List<string> { $"{ms[1].Xg}", $"{ms[1].Shots}", $"{ms[1].ShotsOnTarget}",
+            $"{ms[1].ShotsBlocked}", $"{ms[1].Saves}", $"{ms[1].BallPossession}", $"{ms[1].Corners}",
+            $"{ms[1].Fouls}", $"{ms[1].Offsides}", $"{ms[1].YCards}", $"{ms[1].RCards}", $"{ms[1].Attacks}",
+            $"{ms[1].AttacksDangerous}", $"{ms[1].Passes}", $"{ms[1].AccPasses}", $"{ms[1].FreeKicks}",
+            $"{ms[1].Prowing}", $"{ms[1].Crosses}", $"{ms[1].Tackles}"};
+            return (homeStats, awayStats);
+        }
+
+        public List<FootballMatch> GetMatchesBySeason(Season season)
+        {
+            using (var db = new AppContext())
+            {
+                var matches = db.Matches.Where(x => x.SeasonId == season.Id).Include(x => x.Statistics).Include(x => x.Season).ToList();
+                return matches;
+            }
+        }
+
+        public FootballClub GetClubByClubId(string clubId)
+        {
+            using (var db = new AppContext())
+            {
+                var club = db.Clubs.Find(clubId);
+                return club;
+            }
+        }
+
+        public Competition GetCompetitionByCompetitionId(string competitionId)
+        {
+            using (var db = new AppContext())
+            {
+                var competition = db.Competitions.Find(competitionId);
+                return competition;
+            }
+        }
+
+        public List<SquadType> GetSquadTypesByStatistics(MatchStatistics ms)
+        {
+            using (var db = new AppContext())
+            {
+                var result = db.MatchSquad.Where(x => x.StatisticsId == ms.Id).Select(x => x.Type).Distinct().ToList();
+                return result;
+            }
+        }
+
+        public List<MatchSquadPlayers> GetSquadPlayersByStatistics(MatchStatistics ms, SquadType st)
+        {
+            using (var db = new AppContext())
+            {
+                var players = db.MatchSquad.Where(x => x.StatisticsId == ms.Id && x.Type == st).Include(x => x.Player).AsEnumerable().OrderBy(x => x.Player, new ComparePosition()).ToList();
+                return players;
+            }
+        }
+
         private DataBaseManager() { }
 
 
     }
 
-    public class ComparePosition : IComparer<PlayerStatistics>
+    public class ComparePosition : IComparer<PlayerStatistics>, IComparer<Player>
     {
         private Dictionary<string?, int> positionPriority = new Dictionary<string?, int>()
         {
@@ -259,6 +347,18 @@ namespace FootballTracker.Controllers
             if (x.PlayerName != null && y.PlayerName != null && x.PlayerName.Position != null && y.PlayerName.Position != null)
             {
                 return positionPriority[x.PlayerName.Position].CompareTo(positionPriority[y.PlayerName.Position]);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        public int Compare(Player x, Player y)
+        {
+            if (x != null && y != null && x.Position != null && y.Position != null)
+            {
+                return positionPriority[x.Position].CompareTo(positionPriority[y.Position]);
             }
             else
             {

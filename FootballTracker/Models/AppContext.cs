@@ -1,4 +1,5 @@
 ﻿using lesson1;
+using lesson1.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,14 @@ namespace FootballTracker.Models
         public DbSet<FootballClub> Clubs { get; set; }
 
         public DbSet<Player> Players { get; set; }
+
+        public DbSet<FootballMatch> Matches { get; set; }
+
+        public DbSet<MatchStatistics> MatchStatistics { get; set; }
+
+        public DbSet<MatchEvent> MatchEvents { get; set; }
+
+        public DbSet<MatchSquadPlayers> MatchSquad { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -80,33 +80,79 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <StackPanel Orientation="Vertical">
-                    <ComboBox x:Name="cbGroups" Margin="10,10,160,10" Visibility="Collapsed"
-                              SelectionChanged="cbGroups_SelectionChanged"/>
-                    <DataGrid x:Name="dgCompetitionTable" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="№" Binding="{Binding Path=Position}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Style="{StaticResource ClubStyle}">
-                                            <Image Source="{Binding Club.ImgSource}" Margin="5,0" Width="20" Height="20"/>
-                                            <TextBlock Text="{Binding Path=Club.Name}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="И" Binding="{Binding Path=GamesPlayed}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTextColumn Header="В" Binding="{Binding Path=GamesWon}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTextColumn Header="Н" Binding="{Binding Path=GamesDrawn}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTextColumn Header="П" Binding="{Binding Path=GamesLost}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTextColumn Header="З" Binding="{Binding Path=GoalsScored}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTextColumn Header="П" Binding="{Binding Path=GoalsMissed}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTextColumn Header="+/-" Binding="{Binding Path=GoalsDifference}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                            <DataGridTextColumn Header="О" Binding="{Binding Path=Points}" HeaderStyle="{StaticResource HeadersStyle}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <ComboBox x:Name="cbGroups" Margin="10,10,160,10" Visibility="Collapsed"
+                              SelectionChanged="cbGroups_SelectionChanged" HorizontalAlignment="Left"/>
+                        <DataGrid x:Name="dgCompetitionTable" HorizontalAlignment="Left" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№" Binding="{Binding Path=Position}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTemplateColumn Header="Команда" HeaderStyle="{StaticResource HeadersStyle}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource ClubStyle}">
+                                                <Image Source="{Binding Club.ImgSource}" Margin="5,0" Width="20" Height="20"/>
+                                                <TextBlock Text="{Binding Path=Club.Name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="И" Binding="{Binding Path=GamesPlayed}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="В" Binding="{Binding Path=GamesWon}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="Н" Binding="{Binding Path=GamesDrawn}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="П" Binding="{Binding Path=GamesLost}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="З" Binding="{Binding Path=GoalsScored}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="П" Binding="{Binding Path=GoalsMissed}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="+/-" Binding="{Binding Path=GoalsDifference}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                                <DataGridTextColumn Header="О" Binding="{Binding Path=Points}" HeaderStyle="{StaticResource HeadersStyle}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <DataGrid x:Name="dgMatches" HorizontalAlignment="Left" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.RowStyle>
+                                <Style>
+                                    <EventSetter Event="DataGridRow.Selected" Handler="MatchName_DataGridRowSelected"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="Control.IsMouseOver" Value="True">
+                                            <Setter Property="Control.Cursor" Value="Hand"/>
+                                            <Setter Property="Control.Foreground" Value="Red"/>
+                                            <Setter Property="Control.Opacity" Value="0.8"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=StatusLabel}"/>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding Path=Home.ImgSource}" Margin="5,0" Width="20" Height="20"/>
+                                                <TextBlock Text="{Binding Path=Home.Name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Score}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding Path=Away.ImgSource}" Margin="5,0" Width="20" Height="20"/>
+                                                <TextBlock Text="{Binding Path=Away.Name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
                 <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <UniformGrid Rows="3">
                         <StackPanel Margin="10" HorizontalAlignment="Left">
@@ -171,7 +217,7 @@
                         <StackPanel Margin="10" HorizontalAlignment="Left">
                             <TextBlock HorizontalAlignment="Left">Штрафники</TextBlock>
                             <DataGrid x:Name="dgRudePlayers" AutoGenerateColumns="False" IsReadOnly="True">
-                                <DataGrid.Columns>                                  
+                                <DataGrid.Columns>
                                     <DataGridTemplateColumn Header="Имя" HeaderStyle="{StaticResource HeadersStyle}">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -212,6 +258,7 @@
                             <TextBlock Text="Страна:" Margin="0,15"/>
                             <TextBlock Text="Сезон:" Margin="0,15"/>
                             <TextBlock Text="Статистика игроков:" Margin="0,15"/>
+                            <TextBlock Text="Команды:" Margin="0,15"/>
                         </StackPanel>
                         <StackPanel Margin="20,0">
                             <TextBlock Text="{Binding Name}" Margin="0,15"/>
@@ -222,6 +269,24 @@
                             <ComboBox x:Name="cbSeasons" HorizontalAlignment="Left" Margin="0,15" DisplayMemberPath="Year"
                                   SelectionChanged="cbSeasons_SelectionChanged"/>
                             <Button x:Name="btnShowPlayerStats" Margin="0,15" Content="Показать" Click="btnShowPlayerStats_Click"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                                <StackPanel Orientation="Vertical">
+                                    <DataGrid x:Name="dgClubs" HorizontalAlignment="Left" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None" BorderThickness="0" CanUserResizeColumns="False" CanUserReorderColumns="False" CanUserSortColumns="False" HeadersVisibility="None">
+                                        <DataGrid.Columns>
+                                            <DataGridTemplateColumn>
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal" Style="{StaticResource ClubStyle}">
+                                                            <Image Source="{Binding Path=ImgSource}" Margin="5,0" Width="16" Height="16"/>
+                                                            <TextBlock Text="{Binding Path=Name}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </ScrollViewer>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

@@ -183,8 +183,8 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" Style="{StaticResource ClubStyle}">
-                                                <TextBlock Text="{Binding Path=Name}"/>
                                                 <Image Source="{Binding Path=ImgSource}" Margin="5,0" Width="16" Height="16"/>
+                                                <TextBlock Text="{Binding Path=Name}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>

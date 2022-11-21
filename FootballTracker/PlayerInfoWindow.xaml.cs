@@ -59,7 +59,12 @@ namespace FootballTracker
             dgStats.ItemsSource = playerStatistics;
             dgResultStats.ItemsSource = dbManager.GetResultsByPlayerStatistics(playerStatistics);
             dgClubs.ItemsSource = dbManager.GetCurrentClubsByPlayer(player);
-            spCountry.DataContext = dbManager.GetCountryByName(player.Citizenship);
+            var country = dbManager.GetCountryByName(player.Citizenship);
+            if(country is null)
+            {
+                country = new FootballClub { Name = player.Citizenship };
+            }
+            spCountry.DataContext = country;
             tbAge.Text = $"({dbManager.GetAgeString(player.DateOfBirth)})";
         }
 
@@ -87,7 +92,7 @@ namespace FootballTracker
             {
                 club = ps.Club;
             }
-            if(club != null)
+            if(club.Id != null)
             {
                 var clubInfoWindow = new ClubInfoWindow(club);
                 clubInfoWindow.Owner = this;

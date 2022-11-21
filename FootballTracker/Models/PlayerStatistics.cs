@@ -28,7 +28,7 @@ namespace lesson1
         public int PenGoals { get; set; }
         public int DoubleGoals { get; set; }
         public int HatTricks { get; set; }
-        public int AutoGoals { get; set; }
+        public int OwnGoals { get; set; }
         public int YellowCards { get; set; }
         public int YellowRedCards { get; set; }
         public int RedCards { get; set; }
