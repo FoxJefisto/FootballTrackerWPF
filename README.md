@@ -9,7 +9,7 @@
 </p>
 
 ## About
-This project demonstrated an alternative way of working with databases using the ORM Entity Framework tools. The database for storing soccer statistics consists of 9 tables and contains more than 2 million rows of data. With the help of WPF technology, an application for soccer fans has been developed that contains all the results of sporting events, as well as providing the opportunity to follow the matches live.
+This project demonstrates an alternative way of working with databases using the ORM Entity Framework tools. The database for storing soccer statistics consists of 9 tables and contains more than 2 million rows of data. With the help of WPF technology, an application for soccer fans has been developed. It contains all the results of sport events, also it provides the opportunity to follow the matches live.
 ### ...
 В данном проекте был продемонстрирован альтернативный способ работы с базами данных при помощи средств ORM Entity Framework. База данных для хранения футбольной статистики состоит из 9 таблиц и содержит более 2 миллионов строк данных. С помощью технологии WPF было разработано приложение для футбольных фанатов, которое содержит в себе все результаты спортивных событий, а также предоставляет возможность следить за матчами в прямом эфире.
 
