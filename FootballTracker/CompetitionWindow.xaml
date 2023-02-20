@@ -7,56 +7,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="CompetitionWindow" Height="800" Width="1500" WindowStartupLocation="CenterOwner"
-        Loaded="Window_Loaded" WindowStyle="None"
+        Loaded="Window_Loaded" WindowStyle="None" Closed="Window_Closed"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <Window.Resources>
-        <Style x:Key="ClubStyle">
-            <EventSetter Event="Control.MouseLeftButtonDown" Handler="tbClubName_MouseLeftButtonDown"/>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="PlayerStyle">
-            <EventSetter Event="Control.MouseLeftButtonDown" Handler="tbPlayerName_MouseLeftButtonDown"/>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="CloseStyle">
-            <Style.Setters>
-                <Setter Property="Control.Foreground" Value="White"/>
-                <EventSetter Event="Control.MouseLeftButtonDown" Handler="iconClose_MouseLeftButtonDown"/>
-            </Style.Setters>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="BackStyle">
-            <Style.Setters>
-                <Setter Property="Control.Foreground" Value="White"/>
-                <EventSetter Event="Control.MouseLeftButtonDown" Handler="iconBack_MouseLeftButtonDown"/>
-            </Style.Setters>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="80"/>
@@ -76,7 +28,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="12*"/>
+                <ColumnDefinition Width="30*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -108,24 +60,12 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         <DataGrid x:Name="dgMatches" HorizontalAlignment="Left" AutoGenerateColumns="False" IsReadOnly="True">
-                            <DataGrid.RowStyle>
-                                <Style>
-                                    <EventSetter Event="DataGridRow.Selected" Handler="MatchName_DataGridRowSelected"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="Control.IsMouseOver" Value="True">
-                                            <Setter Property="Control.Cursor" Value="Hand"/>
-                                            <Setter Property="Control.Foreground" Value="Red"/>
-                                            <Setter Property="Control.Opacity" Value="0.8"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Path=StatusLabel}"/>
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource MatchStyle}">
                                                 <Image Source="{Binding Path=Home.ImgSource}" Margin="5,0" Width="20" Height="20"/>
                                                 <TextBlock Text="{Binding Path=Home.Name}"/>
                                             </StackPanel>
@@ -135,14 +75,14 @@
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Score}"/>
+                                            <TextBlock Text="{Binding Path=Score}" Style="{StaticResource MatchStyle}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource MatchStyle}">
                                                 <Image Source="{Binding Path=Away.ImgSource}" Margin="5,0" Width="20" Height="20"/>
                                                 <TextBlock Text="{Binding Path=Away.Name}"/>
                                             </StackPanel>

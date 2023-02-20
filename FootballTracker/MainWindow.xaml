@@ -5,35 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FootballTracker"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1500"
         Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" WindowStyle="None"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <Window.Resources>
-        <Style x:Key="CompetitionStyle">
-            <EventSetter Event="Control.MouseLeftButtonDown" Handler="tbCompetition_MouseLeftButtonDown"/>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="CloseStyle">
-            <Style.Setters>
-                <Setter Property="Control.Foreground" Value="White"/>
-                <EventSetter Event="Control.MouseLeftButtonDown" Handler="iconClose_MouseLeftButtonDown"/>
-            </Style.Setters>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="80"/>
@@ -57,7 +33,8 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="1">
+            <StackPanel Grid.Column="0" Margin="0,30">
+                <TextBlock Text="Чемпионаты" HorizontalAlignment="Center"/>
                 <DataGrid x:Name="dgCompetitions" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="Название" Width="1*" HeaderStyle="{StaticResource HeadersStyle}">
@@ -67,10 +44,64 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Страна" Binding="{Binding Path=Country}" Width="1*" HeaderStyle="{StaticResource HeadersStyle}"/>
+                        <DataGridTextColumn Header="Страна" Binding="{Binding Path=Country}" Width="1*" HeaderStyle="{StaticResource HeadersStyle}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
+            <Grid Grid.Column="1" Margin="0,30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="12*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Расписание матчей" HorizontalAlignment="Center" Margin="0,0,0,50" FontSize="30"/>
+                <DataGrid Grid.Row="1" x:Name="dgMatches" HorizontalAlignment="Center" AutoGenerateColumns="False" IsReadOnly="True" 
+                          ScrollViewer.CanContentScroll="True" 
+      ScrollViewer.VerticalScrollBarVisibility="Auto"
+      ScrollViewer.HorizontalScrollBarVisibility="Auto" BorderBrush="{x:Null}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=StatusLabel}"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5,0" Style="{StaticResource MatchStyle}">
+                                        <Image Source="{Binding Path=Home.ImgSource}" Margin="5,0" Width="20" Height="20"/>
+                                        <TextBlock Text="{Binding Path=Home.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Score}" Style="{StaticResource MatchStyle}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5,0" Style="{StaticResource MatchStyle}">
+                                        <Image Source="{Binding Path=Away.ImgSource}" Margin="5,0" Width="20" Height="20"/>
+                                        <TextBlock Text="{Binding Path=Away.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="5,0" Style="{StaticResource CompetitionStyle}">
+                                        <Image Source="{Binding Path=Season.Competition.ImgSource}" Margin="5,0" Width="20" Height="20"/>
+                                        <TextBlock Text="{Binding Path=Season.Competition.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <DatePicker Grid.Column="2" Margin="0,30" Name="dPicker" SelectedDate="{x:Static sys:DateTime.Now}"
+                                HorizontalAlignment="Left" FontSize="20" SelectedDateChanged="dPicker_SelectedDateChanged" Background="{x:Null}" BorderBrush="{x:Null}"/>
         </Grid>
         <StackPanel Grid.Row="2"></StackPanel>
     </Grid>

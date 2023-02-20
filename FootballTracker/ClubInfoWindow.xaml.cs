@@ -1,6 +1,6 @@
-﻿using FootballTracker.Controllers;
+﻿using FootballTracker.Database;
+using FootballTracker.Model;
 using ImageMagick;
-using lesson1;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
@@ -91,17 +91,6 @@ namespace FootballTracker
                 clubInfoWindow.Show();
             }
 
-        }
-
-        private void iconClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void iconBack_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.Owner.Show();
-            this.Close();
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

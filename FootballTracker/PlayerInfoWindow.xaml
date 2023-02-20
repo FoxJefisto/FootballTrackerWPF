@@ -10,54 +10,6 @@
         Loaded="Window_Loaded" WindowStyle="None"
         WindowStartupLocation="CenterOwner"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <Window.Resources>
-        <Style x:Key="CompetitionStyle">
-            <EventSetter Event="Control.MouseLeftButtonDown" Handler="tbCompetition_MouseLeftButtonDown"/>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="ClubStyle">
-            <EventSetter Event="Control.MouseLeftButtonDown" Handler="tbClubName_MouseLeftButtonDown"/>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="CloseStyle">
-            <Style.Setters>
-                <Setter Property="Control.Foreground" Value="White"/>
-                <EventSetter Event="Control.MouseLeftButtonDown" Handler="iconClose_MouseLeftButtonDown"/>
-            </Style.Setters>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="BackStyle">
-            <Style.Setters>
-                <Setter Property="Control.Foreground" Value="White"/>
-                <EventSetter Event="Control.MouseLeftButtonDown" Handler="iconBack_MouseLeftButtonDown"/>
-            </Style.Setters>
-            <Style.Triggers>
-                <Trigger Property="Control.IsMouseOver" Value="True">
-                    <Setter Property="Control.Cursor" Value="Hand"/>
-                    <Setter Property="Control.Foreground" Value="Red"/>
-                    <Setter Property="Control.Opacity" Value="0.8"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="80"/>

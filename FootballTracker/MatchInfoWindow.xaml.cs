@@ -1,7 +1,5 @@
-﻿using FootballTracker.Controllers;
-using FootballTracker.Models;
-using lesson1;
-using lesson1.Model;
+﻿using FootballTracker.Database;
+using FootballTracker.Model;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
@@ -73,7 +71,10 @@ namespace FootballTracker
         private void SetData()
         {
             match = new MatchRow(dbManager.GetMatchByMatchId(match.Match.Id));
-            match.Statistics.ForEach(x => { x.Events = dbManager.GetMatchEventsByStatisticsId(x); });
+            foreach(var x in match.Statistics)
+            {
+                x.Events = dbManager.GetMatchEventsByStatisticsId(x);
+            }
             spScore.DataContext = match;
             var tableStats = new MatchStatisticsTable(match.Statistics[0], match.Statistics[1]);
             dgStatistics.ItemsSource = tableStats.result;
@@ -96,72 +97,12 @@ namespace FootballTracker
             cbAwaySquad.ItemsSource = typesAway;
             cbHomeSquad.SelectedIndex = 0;
             cbAwaySquad.SelectedIndex = 0;
-        }
-
-        private void iconClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void iconBack_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.Owner.Show();
-            this.Close();
+            GC.Collect(3, GCCollectionMode.Forced);
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
-        }
-
-        private void tbClubName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-            FootballClub club = null;
-            if (element.DataContext is FootballClub fc)
-            {
-                club = fc;
-            }
-            else if (element.DataContext is Player p)
-            {
-                club = dbManager.GetCountryByName(p.Citizenship);
-            }
-            if (club != null)
-            {
-                var clubInfoWindow = new ClubInfoWindow(club);
-                clubInfoWindow.Owner = this;
-                this.Hide();
-                clubInfoWindow.Show();
-            }
-        }
-
-        private void tbPlayerName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-            Player player = null;
-            if (element.DataContext is MatchSquadPlayers ps)
-            {
-                player = ps.Player;
-            }
-            else if (element.DataContext is RowInMatchEvents row)
-            {
-                if(row.HomePlayer is Player p1)
-                {
-                    player = p1;
-                }
-                else if (row.AwayPlayer is Player p2)
-                {
-                    player = p2;
-                }
-            }
-            if(player != null)
-            {
-                var playerInfoWindow = new PlayerInfoWindow(player);
-                playerInfoWindow.Owner = this;
-                this.Hide();
-                playerInfoWindow.Show();
-            }
-
         }
 
         private void cbHomeSquad_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -176,6 +117,7 @@ namespace FootballTracker
                 var players = dbManager.GetSquadPlayersByStatistics(match.Statistics[0], squadType);
                 dgHomeSquad.ItemsSource = players;
             }
+            GC.Collect(3, GCCollectionMode.Forced);
 
         }
 
@@ -191,6 +133,7 @@ namespace FootballTracker
                 var players = dbManager.GetSquadPlayersByStatistics(match.Statistics[1], squadType);
                 dgAwaySquad.ItemsSource = players;
             }
+            GC.Collect(3, GCCollectionMode.Forced);
         }
 
         private void UpdateData(object sender, EventArgs e)
@@ -202,8 +145,17 @@ namespace FootballTracker
             else
             {
                 SetData();
-                GC.Collect();
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (!match.Status.Contains("Завершен"))
+            {
+                dispatcherTimer.Stop();
+                dispatcherTimer = null;
+            }
+            GC.Collect(3, GCCollectionMode.Forced);
         }
     }
 }

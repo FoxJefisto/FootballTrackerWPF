@@ -1,5 +1,5 @@
-﻿using FootballTracker.Controllers;
-using lesson1;
+﻿using FootballTracker.Database;
+using FootballTracker.Model;
 using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using System;
@@ -16,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace FootballTracker
 {
@@ -101,5 +102,7 @@ namespace FootballTracker
         {
             this.DragMove();
         }
+
+
     }
 }

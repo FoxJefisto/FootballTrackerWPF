@@ -1,5 +1,5 @@
-﻿using FootballTracker.Controllers;
-using lesson1;
+﻿using FootballTracker.Database;
+using FootballTracker.Model;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
@@ -66,50 +66,6 @@ namespace FootballTracker
             }
             spCountry.DataContext = country;
             tbAge.Text = $"({dbManager.GetAgeString(player.DateOfBirth)})";
-        }
-
-        private void tbCompetition_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var tb = sender as FrameworkElement;
-            if(tb.DataContext is PlayerStatistics ps && ps.Season is Season season && season.Competition is Competition comp)
-            {
-                var compWindow = new CompetitionWindow(comp);
-                compWindow.Owner = this;
-                compWindow.Show();
-                this.Hide();
-            }
-        }
-
-        private void tbClubName_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-            FootballClub club = null;
-            if (element.DataContext is FootballClub c)
-            {
-                club = c;
-            }
-            else if (element.DataContext is PlayerStatistics ps)
-            {
-                club = ps.Club;
-            }
-            if(club.Id != null)
-            {
-                var clubInfoWindow = new ClubInfoWindow(club);
-                clubInfoWindow.Owner = this;
-                clubInfoWindow.Show();
-                this.Hide();
-            }
-        }
-
-        private void iconClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void iconBack_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.Owner.Show();
-            this.Close();
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
