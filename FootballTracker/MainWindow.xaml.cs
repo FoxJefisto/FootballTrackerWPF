@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace FootballTracker
 {
@@ -24,6 +25,7 @@ namespace FootballTracker
     public partial class MainWindow : Window
     {
         public DataBaseManager dbManager;
+        DispatcherTimer dispatcherTimer;
         public MainWindow()
         {
             dbManager = DataBaseManager.GetInstance();
@@ -33,6 +35,10 @@ namespace FootballTracker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             dgCompetitions.ItemsSource = dbManager.GetCompetitions();
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(UpdateData);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 60);
+            dispatcherTimer.Start();
         }
 
         private void MatchName_DataGridRowSelected(object sender, RoutedEventArgs e)
@@ -55,14 +61,29 @@ namespace FootballTracker
 
         private void dPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            var date = (sender as DatePicker).SelectedDate;
-            var matches = dbManager.GetMatchesByDate(date.Value);
+            SetData(dPicker.SelectedDate.Value);
+        }
+
+        private void SetData(DateTime date)
+        {
+            var matches = dbManager.GetMatchesByDate(date);
             var matchesRow = matches.Select(x => new MatchRow(x)
             {
                 Home = dbManager.GetClubByClubId(x.Statistics[0].ClubId),
                 Away = dbManager.GetClubByClubId(x.Statistics[1].ClubId)
             });
             dgMatches.ItemsSource = matchesRow;
+        }
+
+        private void UpdateData(object sender, EventArgs e)
+        {
+            SetData(dPicker.SelectedDate.Value);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            dispatcherTimer.Stop();
+            dispatcherTimer = null;
         }
     }
 }

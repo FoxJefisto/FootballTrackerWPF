@@ -60,6 +60,15 @@
                             </DataGrid.Columns>
                         </DataGrid>
                         <DataGrid x:Name="dgMatches" HorizontalAlignment="Left" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsLive}" Value="True">
+                                            <Setter Property="Foreground" Value="Red" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Path=StatusLabel}"/>
                                 <DataGridTemplateColumn>

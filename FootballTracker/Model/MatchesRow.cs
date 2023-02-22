@@ -15,6 +15,7 @@ namespace FootballTracker.Model
             Label = match.Label;
             Season = match.Season;
             Statistics = match.Statistics;
+            IsLive = true;
             if (match.Statistics[0].Goals == null && match.Statistics[1].Goals == null)
             {
                 Score = "- : -";
@@ -27,6 +28,7 @@ namespace FootballTracker.Model
             if (match.Status.Contains("Завершен") || match.Status == "Ожидается")
             {
                 StatusLabel = $"{match.Date.Value:g}";
+                IsLive = false;
             }
             else
             {
@@ -46,6 +48,7 @@ namespace FootballTracker.Model
         public Season? Season { get; set; }
         public string? Status { get; set; }
         public DateTime? Date { get; set; }
+        public bool IsLive { get; set; }
 
         public string StatusLabel { get; set; }
         public ObservableCollection<MatchStatistics> Statistics { get; set; }

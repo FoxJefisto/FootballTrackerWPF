@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1500"
         Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Closed="Window_Closed"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
         <Grid.RowDefinitions>
@@ -58,6 +59,15 @@
                           ScrollViewer.CanContentScroll="True" 
       ScrollViewer.VerticalScrollBarVisibility="Auto"
       ScrollViewer.HorizontalScrollBarVisibility="Auto" BorderBrush="{x:Null}">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLive}" Value="True">
+                                    <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Path=StatusLabel}"/>
                         <DataGridTemplateColumn>
