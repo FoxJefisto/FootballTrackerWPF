@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Xml.Linq;
 using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
 
 namespace FootballTracker
 {
@@ -26,7 +27,6 @@ namespace FootballTracker
         protected override void OnStartup(StartupEventArgs e)
         {
             WalkDictionary(this.Resources);
-
             base.OnStartup(e);
         }
 

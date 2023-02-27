@@ -1,11 +1,11 @@
 ﻿using FootballTracker.Model;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AppContext = FootballTracker.Model.AppContext;
 
 namespace FootballTracker.Database
 {
@@ -22,9 +22,16 @@ namespace FootballTracker.Database
             return instance;
         }
 
+        public bool HasConnection()
+        {
+            using (var db = new ContextApp())
+            {
+                return db.Database.CanConnect();
+            }
+        }
         public ObservableCollection<Competition> GetCompetitions()
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 return db.Competitions.OrderByDescending(x => x.Country).ToObservableCollection();
             }
@@ -32,7 +39,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<Season> GetSeasonsByComp(Competition comp)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 return db.Seasons.Where(x => comp.Id == x.CompetitionId).Include(x => x.Competition).OrderByDescending(x => x.Year).ToObservableCollection();
             }
@@ -40,7 +47,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<string> GetSeasonsYearsByClub(FootballClub club)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 return db.ClubsSeasons.Where(x => x.ClubId == club.Id)
                     .Include(x => x.Season).GroupBy(x => x.Season.Year).OrderByDescending(x => x.Key)
@@ -49,7 +56,7 @@ namespace FootballTracker.Database
         }
         public ObservableCollection<string?> GetCompetitionGroupNames(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.CompetitionTable.Where(x => x.SeasonId == season.Id).Select(x => x.GroupName).Distinct().OrderBy(x => x).ToObservableCollection();
                 return table;
@@ -58,7 +65,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<CompetitionTable> GetCompetitionTable(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.CompetitionTable.Where(x => x.SeasonId == season.Id).Include(x => x.Club).OrderBy(x => x.Position).ToObservableCollection();
                 return table;
@@ -67,7 +74,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<CompetitionTable> GetCompetitionTableByGroupName(Season season, string groupName)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.CompetitionTable.Where(x => x.SeasonId == season.Id && x.GroupName == groupName).Include(x => x.Club).OrderBy(x => x.Position).ToObservableCollection();
                 return table;
@@ -76,7 +83,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<PlayerStatistics> GetBombarders(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.Goals).Take(10).ToObservableCollection();
                 return table;
@@ -85,7 +92,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<PlayerStatistics> GetAssistants(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.Assists).Take(10).ToObservableCollection();
                 return table;
@@ -94,7 +101,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<PlayerStatistics> GetRudePlayers(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.FairPlayScore).Take(10).ToObservableCollection();
                 return table;
@@ -103,7 +110,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<PlayerStatistics> GetSquadPlayers(FootballClub club, string seasonYear)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var players = db.PlayerStatistics.Where(x => x.Season.Year == seasonYear && x.ClubId == club.Id)
                     .Include(x => x.Club).Include(x => x.PlayerName).AsEnumerable().DistinctBy(x => x.Label).ToList();
@@ -118,7 +125,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<PlayerStatistics> GetPlayerStatisticsByPlayer(Player player)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.PlayerStatistics.Where(x => x.PlayerId == player.Id)
                     .Include(x => x.Season).Include(x => x.Season.Competition).Include(x => x.Club)
@@ -129,7 +136,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<PlayerStatistics> GetPlayerStatisticsBySeason(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.PlayerStatistics.Where(x => x.SeasonId == season.Id).Include(x => x.Club).Include(x => x.PlayerName).OrderByDescending(x => x.Goals).ToObservableCollection();
                 return table;
@@ -138,7 +145,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<Competition> GetCompetitionsByClubYear(FootballClub club, string year)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.ClubsSeasons.Include(x => x.Season).Include(x => x.Season.Competition)
                     .Where(x => x.ClubId == club.Id && x.Season.Year == year).Select(x => x.Season.Competition).OrderBy(x => x.Name).ToObservableCollection();
@@ -148,7 +155,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<FootballClub> GetCurrentClubsByPlayer(Player player)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var table = db.PlayerStatistics.Where(x => x.PlayerId == player.Id).Include(x => x.Season).Include(x => x.Club).ToObservableCollection();
                 var result = table.Where(x => IsCurrentSeason(x.Season.Year)).OrderByDescending(x => x.Matches).Select(x => x.Club).Distinct().ToObservableCollection();
@@ -201,7 +208,7 @@ namespace FootballTracker.Database
 
         public FootballClub GetCountryByName(string countryName)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var country = db.Clubs.FirstOrDefault(x => x.Name == countryName);
                 return country;
@@ -216,7 +223,7 @@ namespace FootballTracker.Database
                 var age = today.Year - birthdate.Year;
                 if (birthdate.Date > today.AddYears(-age)) age--;
                 string yearStr;
-                switch(age % 10)
+                switch (age % 10)
                 {
                     case 1:
                         yearStr = " год";
@@ -237,7 +244,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<FootballClub> GetClubsBySeason(Season season)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var result = db.ClubsSeasons.Include(x => x.Club).Where(x => x.SeasonId == season.Id).Select(x => x.Club).OrderBy(x => x.Name).ToObservableCollection();
                 return result;
@@ -246,7 +253,7 @@ namespace FootballTracker.Database
 
         public FootballMatch GetMatchByMatchId(string? matchId)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var result = db.Matches.Include(x => x.Statistics).First(x => x.Id == matchId);
                 return result;
@@ -255,7 +262,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<MatchEvent> GetMatchEventsByStatisticsId(MatchStatistics stats)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var result = db.MatchEvents.Where(x => x.StatisticsId == stats.Id).Include(x => x.Player).ToObservableCollection();
                 return result;
@@ -264,7 +271,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<FootballMatch> GetMatchesBySeason(Season season)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var matches = db.Matches.Where(x => x.SeasonId == season.Id).Include(x => x.Statistics).Include(x => x.Season).ToObservableCollection();
                 return matches;
@@ -273,7 +280,7 @@ namespace FootballTracker.Database
 
         public FootballClub GetClubByClubId(string clubId)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var club = db.Clubs.Find(clubId);
                 return club;
@@ -282,7 +289,7 @@ namespace FootballTracker.Database
 
         public Competition GetCompetitionByCompetitionId(string competitionId)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var competition = db.Competitions.Find(competitionId);
                 return competition;
@@ -291,7 +298,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<SquadType> GetSquadTypesByStatistics(MatchStatistics ms)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var result = db.MatchSquad.Where(x => x.StatisticsId == ms.Id).Select(x => x.Type).Distinct().ToObservableCollection();
                 return result;
@@ -300,7 +307,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<MatchSquadPlayers> GetSquadPlayersByStatistics(MatchStatistics ms, SquadType st)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var players = db.MatchSquad.Where(x => x.StatisticsId == ms.Id && x.Type == st).Include(x => x.Player).AsEnumerable().OrderBy(x => x.Player, new ComparePosition()).ToObservableCollection();
                 return players;
@@ -309,7 +316,7 @@ namespace FootballTracker.Database
 
         public ObservableCollection<FootballMatch> GetMatchesByDate(DateTime date)
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var matches = db.Matches.Where(x => x.Date.Value.Day == date.Day && x.Date.Value.Month == date.Month && x.Date.Value.Year == date.Year)
                     .Include(x => x.Statistics).Include(x => x.Season).Include(x => x.Season.Competition).OrderBy(x => x.Season.Competition.Name).ThenBy(x => x.Date).ToObservableCollection();

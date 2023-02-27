@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static FootballFetcher.Database.DataFetcher;
-using AppContext = FootballFetcher.Model.AppContext;
 
 namespace FootballFetcher.Database
 {
@@ -36,7 +35,7 @@ namespace FootballFetcher.Database
 
         public string[] FilterPlayersId(List<string> playersId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var result = playersId.Distinct().Except(db.Players.Select(x => x.Id)).ToArray();
                 playersExpectedLength = result.Length + db.Players.Count();
@@ -46,7 +45,7 @@ namespace FootballFetcher.Database
 
         public string[] FilterClubsId(List<string> clubsId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var result = clubsId.Distinct().Except(db.Clubs.Select(x => x.Id)).ToArray();
                 clubsExpectedLength = result.Length + db.Clubs.Count();
@@ -56,7 +55,7 @@ namespace FootballFetcher.Database
 
         public string[] FilterPastMatchesId(List<string> matchesId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var result = matchesId.Except(db.Matches.Where(x => x.Status.Contains("Завершен")).Select(x => x.Id)).ToArray();
                 matchesExpectedLength = result.Length + db.Matches.Count();
@@ -66,7 +65,7 @@ namespace FootballFetcher.Database
 
         public string[] FilterUpcomingMatchesId(List<string> matchesId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var now = DateTime.Now;
                 var result = matchesId.Intersect(db.Matches.Where(x => x.Date.Value.Date == now.Date).Select(x => x.Id)).ToArray();
@@ -77,7 +76,7 @@ namespace FootballFetcher.Database
 
         public void LoadNewDataByCompetitionId(List<string> compsId, int limit)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 LoadCompetitionInfo(compsId);
                 var seasons = dbManager.GetSeasonsByCompetitionsId(compsId, limit);
@@ -90,7 +89,7 @@ namespace FootballFetcher.Database
 
         public void UpdateStatistics()
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var seasons = dbManager.GetCurrentSeasons();
                 LoadPlayersAndClubsInfo(seasons);
@@ -101,37 +100,19 @@ namespace FootballFetcher.Database
 
         public void UpdateCurrentMatches()
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var seasons = dbManager.GetCurrentSeasons();
                 LoadPastMatches(seasons);
-                UpdateLog();
                 UpdateTodayUpcomingMatches();
                 ReloadPostponedMatches();
                 db.SaveChanges();
             }
         }
 
-        public void UpdateLog()
-        {
-            using (AppContext db = new AppContext())
-            {
-                var result = db.UpdateInfo.SingleOrDefault(x => x.ActionName == "UpdatePastMatches");
-                if (result == null)
-                {
-                    db.UpdateInfo.Add(new UpdateInfo("UpdatePastMatches", DateTime.Now));
-                }
-                else
-                {
-                    result.DateTime = DateTime.Now;
-                }
-                db.SaveChanges();
-            }
-        }
-
         public void ReloadPostponedMatches()
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var postponedMatches = db.Matches.Where(x => x.Date.Value < DateTime.Today && (x.Status == "Ожидается" || x.Status == "Перенесен"));
                 var matchIdToSeasonId = new Dictionary<string, int>();
@@ -321,7 +302,7 @@ namespace FootballFetcher.Database
 
         public void LoadOneMatch(string matchId, int seasonId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var c = new SqlCommand();
                 c.CommandTimeout = 0;
@@ -395,7 +376,7 @@ namespace FootballFetcher.Database
 
         public void LoadOneClub(string clubId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 if (!db.Clubs.Any(x => x.Id == clubId))
                 {
@@ -417,7 +398,7 @@ namespace FootballFetcher.Database
 
         public void LoadOnePlayer(string playerId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 if (playerId != null && !db.Players.Any(x => x.Id == playerId))
                 {
@@ -439,7 +420,7 @@ namespace FootballFetcher.Database
 
         public void LoadOneCompetitionInfo(string compId)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var tuple = dataFetcher.GetCompetitionInfo(compId);
                 if (!db.Competitions.Any(x => x.Id == compId))
@@ -468,7 +449,7 @@ namespace FootballFetcher.Database
 
         public void LoadOneSeasonPlayerStatistics(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var c = new SqlCommand();
                 c.CommandTimeout = 0;
@@ -506,7 +487,7 @@ namespace FootballFetcher.Database
 
         public void LoadOneSeasonCompetitionTable(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var c = new SqlCommand();
                 c.CommandTimeout = 0;
@@ -548,7 +529,7 @@ namespace FootballFetcher.Database
 
         public void LoadOneSeasonClubsId(Season season)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var clubsId = dataFetcher.GetClubsIdInLeague(season.CompetitionId, season.Year).Distinct();
                 foreach (var clubId in clubsId)

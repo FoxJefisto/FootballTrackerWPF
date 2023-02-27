@@ -13,6 +13,18 @@ This project demonstrates an alternative way of working with databases using the
 ### ...
 В данном проекте был продемонстрирован альтернативный способ работы с базами данных при помощи средств ORM Entity Framework. База данных для хранения футбольной статистики состоит из 9 таблиц и содержит более 2 миллионов строк данных. С помощью технологии WPF было разработано приложение для футбольных фанатов, которое содержит в себе все результаты спортивных событий, а также предоставляет возможность следить за матчами в прямом эфире.
 
+## Usage
+1. Specify the connection string in FootballTracker/Model/AppContext.cs and FootballFetcher/Model/AppContext.cs
+2. Open a command prompt and enter the following commands:
+- dotnet tool install --global dotnet-ef
+- cd FootballTracker
+- dotnet ef migrations add InitialCreate
+- dotnet ef database update
+3. After these commands the database will be created
+4. Run FootballFetcher app
+5. Enter 1 in the console that opens. The download process takes about 30-60 minutes
+6. Run FootballTracker app
+7. P.S. If you want to update the match data in real time, start the FootballFetcher app and enter 2. Match data and statistics will be updated every minute
 ## Screenshots
 
 <table>

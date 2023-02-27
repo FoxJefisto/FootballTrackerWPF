@@ -1,5 +1,6 @@
 ﻿using FootballTracker.Database;
 using FootballTracker.Model;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,11 +35,20 @@ namespace FootballTracker
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            dgCompetitions.ItemsSource = dbManager.GetCompetitions();
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(UpdateData);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 60);
-            dispatcherTimer.Start();
+
+            if (!dbManager.HasConnection())
+            {
+                MessageBox.Show("Не удалось подключиться к базе данных", "Critical Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                dispatcherTimer = new DispatcherTimer();
+                dgCompetitions.ItemsSource = dbManager.GetCompetitions();
+                dispatcherTimer.Tick += new EventHandler(UpdateData);
+                dispatcherTimer.Interval = new TimeSpan(0, 0, 60);
+                dispatcherTimer.Start();
+            }
         }
 
         private void MatchName_DataGridRowSelected(object sender, RoutedEventArgs e)
@@ -61,7 +71,10 @@ namespace FootballTracker
 
         private void dPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            SetData(dPicker.SelectedDate.Value);
+            if (dbManager.HasConnection())
+            {
+                SetData(dPicker.SelectedDate.Value);
+            }
         }
 
         private void SetData(DateTime date)
@@ -82,8 +95,11 @@ namespace FootballTracker
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            dispatcherTimer.Stop();
-            dispatcherTimer = null;
+            if(dispatcherTimer != null)
+            {
+                dispatcherTimer.Stop();
+                dispatcherTimer = null;
+            }
         }
     }
 }

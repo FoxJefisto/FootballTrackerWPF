@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace FootballTracker.Model
+namespace FootballFetcher.Model
 {
-    public class AppContext : DbContext
+    class ContextApp : DbContext
     {
         public DbSet<Competition> Competitions { get; set; }
 
@@ -28,7 +28,7 @@ namespace FootballTracker.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS; DATABASE=SoccerDB; Trusted_Connection=True; TrustServerCertificate=Yes;");
+            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS; DATABASE=FootballDB; Trusted_Connection=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

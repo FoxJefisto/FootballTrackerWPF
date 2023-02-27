@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AppContext = FootballFetcher.Model.AppContext;
 
 namespace FootballFetcher.Database
 {
@@ -23,7 +22,7 @@ namespace FootballFetcher.Database
 
         public List<Season> GetSeasonsByCompetitionsId(List<string> compsId, int limit = 0)
         {
-            using (AppContext db = new AppContext())
+            using (ContextApp db = new ContextApp())
             {
                 var result = new List<Season>();
                 if (limit == 0)
@@ -69,7 +68,7 @@ namespace FootballFetcher.Database
 
         public List<Season> GetCurrentSeasons()
         {
-            using (var db = new AppContext())
+            using (var db = new ContextApp())
             {
                 var result = db.Seasons.AsEnumerable().Where(x => IsCurrentSeason(x.Year)).ToList();
                 return result;
