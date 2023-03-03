@@ -13,6 +13,9 @@ This project demonstrates an alternative way of working with databases using the
 ### ...
 В данном проекте был продемонстрирован альтернативный способ работы с базами данных при помощи средств ORM Entity Framework. База данных для хранения футбольной статистики состоит из 9 таблиц и содержит более 2 миллионов строк данных. С помощью технологии WPF было разработано приложение для футбольных фанатов, которое содержит в себе все результаты спортивных событий, а также предоставляет возможность следить за матчами в прямом эфире.
 
+## Database Diagram
+    <img src="https://i.imgur.com/93JnnuQ.jpg" alt="diagram">
+
 ## Usage
 1. Specify the connection string in FootballTracker/Model/AppContext.cs and FootballFetcher/Model/AppContext.cs
 2. Open a command prompt and enter the following commands:
